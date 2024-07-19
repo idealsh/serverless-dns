@@ -114,6 +114,7 @@ jobs:
           # input overrides env-defaults, regardless
           environment: ${{ env.WORKERS_ENV }}
           wranglerVersion: ${{ env.WRANGLER_VER }}
+          command: deploy --name ${{ vars.CF_WORKER_NAME || github.event.repository.name }}
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           GIT_COMMIT_ID: ${{ env.COMMIT_SHA }}
