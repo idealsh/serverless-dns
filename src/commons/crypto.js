@@ -126,7 +126,8 @@ export async function hmackey(sk) {
   return crypto.subtle.importKey(
     "raw",
     sk,
-    hmac256opts(),
+    // no length: importKey throws if it differs from the raw key's bit length
+    { name: "HMAC", hash: "SHA-256" },
     false, // export = false
     ["sign", "verify"]
   );
@@ -245,8 +246,8 @@ export async function decryptAesGcm(aeskey, iv, taggedciphertext, aad) {
  * @returns {Promise<Uint8Array>} - The HMAC signature
  * @throws {Error} - If the key is not valid or signing fails
  */
-export function hmacsign(ck, m) {
-  const ab = crypto.subtle.sign("HMAC", ck, m);
+export async function hmacsign(ck, m) {
+  const ab = await crypto.subtle.sign("HMAC", ck, m);
   return normalize8(ab);
 }
 
